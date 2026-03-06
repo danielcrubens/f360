@@ -39,7 +39,7 @@ defineEmits(['update:modelValue'])
 
 function getTabIcon(value) {
   const icons = {
-    todos: List,
+    all: List,
     income: TrendingUp,
     expense: TrendingDown
   }

@@ -19,32 +19,33 @@
       </p>
     </div>
 
-    <ul class="divide-y divide-gray-100">
-      <TransitionGroup
-        name="list"
-        tag="div"
-      >
+    <!-- VIRTUAL LIST: Renderiza apenas ~15 itens visíveis -->
+    <div v-bind="containerProps" class="h-[600px] overflow-auto">
+      <div v-bind="wrapperProps" class="relative">
         <TransactionItem
-          v-for="tx in transactions"
+          v-for="{ data: tx, index } in list"
           :key="tx.id"
           :transaction="tx"
-          @delete="$emit('delete', $event)"
+          @delete="$emit('delete', tx)"
         />
-      </TransitionGroup>
+      </div>
+    </div>
 
-      <li v-if="transactions.length === 0" class="px-5 py-12 text-center text-sm text-gray-400">
-        Nenhuma transação encontrada.
-      </li>
-    </ul>
+    <!-- Empty state -->
+    <div v-if="transactions.length === 0" class="px-5 py-12 text-center text-sm text-gray-400">
+      Nenhuma transação encontrada.
+    </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useVirtualList } from '@vueuse/core'
 import FilterTabs from '@/components/molecules/FilterTabs.vue'
 import SearchBar from '@/components/molecules/SearchBar.vue'
 import TransactionItem from '@/components/molecules/TransactionItem.vue'
 
-defineProps({
+const props = defineProps({
   transactions: {
     type: Array,
     required: true
@@ -64,14 +65,14 @@ defineProps({
 })
 
 defineEmits(['update:activeTab', 'update:search', 'delete'])
+
+// VIRTUAL LIST: Renderiza apenas ~15 itens visíveis (de 30.000)
+const { list, containerProps, wrapperProps } = useVirtualList(
+  computed(() => props.transactions),
+  {
+    itemHeight: 80,  // Altura de cada TransactionItem (py-4 + conteúdo)
+    overscan: 5      // 5 itens extras acima/abaixo (evita flicker)
+  }
+)
 </script>
 
-<!-- <style scoped>
-.list-enter-active {
-  transition: all 0.3s ease;
-}
-.list-enter-from {
-  opacity: 0;
-  transform: translateX(-7rem);
-}
-</style> -->

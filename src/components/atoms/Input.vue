@@ -65,14 +65,15 @@ defineEmits(["update:modelValue"]);
 
 const inputClasses = computed(() => {
   const base =
-    "w-full rounded-md px-4 py-3 text-sm outline-none transition-all duration-150";
+    "w-full rounded-md px-4 py-3 text-sm outline-none transition-all duration-150 border";
 
-  const bgClasses = props.error
-    ? "bg-red-50 border-red-300 focus:ring-alert focus:border-red-500"
+  const stateClasses = props.error
+    ? "border-red-300 focus:ring-alert focus:border-red-500"
     : "bg-gray-100 border-transparent focus:ring-1 focus:ring-primary focus:bg-white";
 
   const textClasses = "text-gray-700 placeholder-gray-400";
+  const bgClasses = props.error ? "" : "bg-gray-100";
 
-  return [base, bgClasses, textClasses].join(" ");
+  return [base, stateClasses, textClasses, bgClasses].join(" ");
 });
 </script>

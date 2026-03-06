@@ -37,14 +37,15 @@ defineEmits(["update:modelValue"]);
 
 const selectClasses = computed(() => {
   const base =
-    "w-full bg-gray-100 rounded-md px-4 py-3 text-sm outline-none transition-all duration-150 appearance-none cursor-pointer";
+    "w-full rounded-md px-4 py-3 text-sm outline-none transition-all duration-150 appearance-none cursor-pointer";
 
   const stateClasses = props.error
-    ? "border border-red-300 focus:ring-1 focus:ring-alert focus:bg-white"
-    : "border border-transparent focus:ring-1 focus:ring-primary focus:bg-white";
+    ? "border border-red-300 focus:ring-1 focus:ring-alert"
+    : "bg-gray-100 border border-transparent focus:ring-1 focus:ring-primary focus:bg-white";
 
   const textClasses = "text-gray-700";
+  const bgClasses = props.error ? "" : "bg-gray-100";
 
-  return [base, stateClasses, textClasses].join(" ");
+  return [base, stateClasses, textClasses, bgClasses].join(" ");
 });
 </script>

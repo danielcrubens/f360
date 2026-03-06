@@ -157,9 +157,7 @@ let cachedTransactions: Transaction[] | null = null
 
 export function getTransactions(count: number = 30000): Transaction[] {
   if (!cachedTransactions) {
-    console.time('Generating 30k transactions')
     cachedTransactions = generateTransactions(count)
-    console.timeEnd('Generating 30k transactions')
   }
   return cachedTransactions
 }
