@@ -11,39 +11,61 @@
         @update:model-value="$emit('update:search', $event)"
         placeholder="Buscar por descrição..."
       />
+      <ViewToggle v-model="showChart" />
     </div>
 
-    <div class="px-5 py-4 border-b border-gray-100">
-      <p class="text-sm text-primary-100">
-        <span class="font-semibold text-primary-100">{{ transactions.length.toLocaleString('pt-BR') }}</span> transações
-      </p>
-    </div>
+    <!-- VISTA: LISTA -->
+    <Transition
+      enter-active-class="transition-all duration-500"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-all duration-500"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0 -translate-y-2"
+      mode="out-in"
+    >
+      <template v-if="!showChart">
+        <div>
+          <div class="px-5 py-4 border-b border-gray-100">
+            <p class="text-sm text-primary-100">
+              <span class="font-semibold text-primary-100">{{ transactions.length.toLocaleString('pt-BR') }}</span> transações
+            </p>
+          </div>
 
-    <!-- VIRTUAL LIST: Renderiza apenas ~15 itens visíveis -->
-    <div v-bind="containerProps" class="h-[600px] overflow-auto">
-      <div v-bind="wrapperProps" class="relative">
-        <TransactionItem
-          v-for="{ data: tx, index } in list"
-          :key="tx.id"
-          :transaction="tx"
-          @delete="$emit('delete', tx)"
-        />
-      </div>
-    </div>
+          <div v-bind="containerProps" class="h-[600px] overflow-auto">
+            <div v-bind="wrapperProps" class="relative">
+              <TransactionItem
+                v-for="{ data: tx, index } in list"
+                :key="tx.id"
+                :transaction="tx"
+                @delete="$emit('delete', tx)"
+              />
+            </div>
+          </div>
 
-    <!-- Empty state -->
-    <div v-if="transactions.length === 0" class="px-5 py-12 text-center text-sm text-gray-400">
-      Nenhuma transação encontrada.
-    </div>
+          <div v-if="transactions.length === 0" class="px-5 py-12 text-center text-sm text-gray-400">
+            Nenhuma transação encontrada.
+          </div>
+        </div>
+      </template>
+
+      <TransactionChart
+        v-else
+        :transactions="transactions"
+        :filter-type="activeTab"
+      />
+    </Transition>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useVirtualList } from '@vueuse/core'
 import FilterTabs from '@/components/molecules/FilterTabs.vue'
 import SearchBar from '@/components/molecules/SearchBar.vue'
+import ViewToggle from '@/components/molecules/ViewToggle.vue'
 import TransactionItem from '@/components/molecules/TransactionItem.vue'
+import TransactionChart from '@/components/organisms/TransactionChart.vue'
 
 const props = defineProps({
   transactions: {
@@ -66,12 +88,13 @@ const props = defineProps({
 
 defineEmits(['update:activeTab', 'update:search', 'delete'])
 
-// VIRTUAL LIST: Renderiza apenas ~15 itens visíveis (de 30.000)
+const showChart = ref(false) 
+
 const { list, containerProps, wrapperProps } = useVirtualList(
   computed(() => props.transactions),
   {
-    itemHeight: 80,  // Altura de cada TransactionItem (py-4 + conteúdo)
-    overscan: 5      // 5 itens extras acima/abaixo (evita flicker)
+    itemHeight: 80,  
+    overscan: 5      
   }
 )
 </script>

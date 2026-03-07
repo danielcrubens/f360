@@ -13,6 +13,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "@vueuse/core": "^14.2.1",
+    "highcharts": "^12.5.0",
     "lucide": "^0.577.0",
     "lucide-vue-next": "^0.577.0",
     "pinia": "^3.0.4",
