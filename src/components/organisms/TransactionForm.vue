@@ -8,6 +8,7 @@
     <div
       v-if="isOpen"
       class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      aria-hidden="true"
     >
       <Transition
         enter-active-class="transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
@@ -15,10 +16,16 @@
         enter-from-class="translate-y-5 scale-[0.97] opacity-0"
         leave-to-class="translate-y-2.5 scale-[0.97] opacity-0"
       >
-        <div v-if="isOpen" class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+        <div
+          v-if="isOpen"
+          class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="transaction-form-title"
+        >
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-primary-100">Nova Transação</h2>
-            <IconButton :icon="X" variant="gray" size="md" @click="closeModal" />
+            <h2 id="transaction-form-title" class="text-xl font-semibold text-primary-100">Nova Transação</h2>
+            <IconButton :icon="X" label="Fechar modal" variant="gray" size="md" @click="closeModal" />
           </div>
 
           <div class="space-y-4">

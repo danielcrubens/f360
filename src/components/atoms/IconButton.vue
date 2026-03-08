@@ -1,5 +1,5 @@
 <template>
-  <button :class="buttonClasses" v-bind="$attrs">
+  <button :class="buttonClasses" :aria-label="label" v-bind="$attrs">
     <component :is="icon" class="w-4 h-4" />
   </button>
 </template>
@@ -12,6 +12,10 @@ import type { IconButtonVariant, IconButtonSize } from "@/types/components";
 const props = defineProps({
   icon: {
     type: [Object, Function],
+    required: true,
+  },
+  label: {
+    type: String,
     required: true,
   },
   variant: {

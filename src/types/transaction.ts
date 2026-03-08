@@ -16,8 +16,7 @@ export interface Transaction {
   amount: number
   type: 'income' | 'expense'
   category: TransactionCategory
-  date: string // ISO 8601 format (YYYY-MM-DD)
+  date: string 
 }
 
-// Type for form input (without id)
 export type TransactionInput = Omit<Transaction, 'id'>

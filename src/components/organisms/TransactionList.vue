@@ -38,14 +38,14 @@
 
           <template v-else>
             <div v-bind="containerProps" class="h-[600px] overflow-auto">
-              <div v-bind="wrapperProps" class="relative">
+              <ul v-bind="wrapperProps" class="relative m-0 p-0 list-none">
                 <TransactionItem
                   v-for="{ data: tx, index } in list"
                   :key="tx.id"
                   :transaction="tx"
                   @delete="$emit('delete', tx)"
                 />
-              </div>
+              </ul>
             </div>
           </template>
         </div>

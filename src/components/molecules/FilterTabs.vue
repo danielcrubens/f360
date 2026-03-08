@@ -1,8 +1,10 @@
 <template>
-  <div class="flex items-center bg-gray-100 rounded-md p-1 gap-1">
+  <div class="flex items-center bg-gray-100 rounded-md p-1 gap-1" role="tablist">
     <button
       v-for="tab in tabs"
       :key="tab.value"
+      :aria-selected="modelValue === tab.value"
+      role="tab"
       @click="$emit('update:modelValue', tab.value)"
       :class="[
         'px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer inline-flex items-center gap-2',

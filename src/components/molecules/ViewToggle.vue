@@ -7,6 +7,7 @@
           ? 'bg-primary text-white shadow-sm'
           : 'text-primary-100 hover:bg-gray-200'
       ]"
+      aria-label="Ver lista"
       @click="$emit('update:modelValue', false)"
       title="Ver lista"
     >
@@ -21,6 +22,7 @@
           ? 'bg-primary text-white shadow-sm'
           : 'text-primary-100 hover:bg-gray-200'
       ]"
+      aria-label="Ver gráfico"
       @click="$emit('update:modelValue', true)"
       title="Ver gráfico"
     >

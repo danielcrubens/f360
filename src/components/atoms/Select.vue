@@ -1,11 +1,13 @@
 <template>
   <div class="app-select">
-    <label v-if="label" class="block text-sm font-medium text-gray-700 mb-1.5">
+    <label v-if="label" :for="selectId" class="block text-sm font-medium text-gray-700 mb-1.5">
       {{ label }}
     </label>
     <select
+      :id="selectId"
       :value="modelValue"
       :class="selectClasses"
+      :aria-label="label || undefined"
       @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
       v-bind="$attrs"
     >
@@ -34,6 +36,9 @@ const props = defineProps({
 });
 
 defineEmits(["update:modelValue"]);
+
+// Generate a unique ID for the select to associate with the label
+const selectId = computed(() => `select-${Math.random().toString(36).substr(2, 9)}`);
 
 const selectClasses = computed(() => {
   const base =

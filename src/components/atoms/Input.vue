@@ -2,11 +2,13 @@
   <div>
     <label
       v-if="label"
+      :for="inputId"
       class="block text-base font-medium text-primary-100 mb-1.5"
     >
       {{ label }}
     </label>
     <input
+      :id="inputId"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
@@ -14,6 +16,7 @@
       :max="max"
       :step="step"
       :class="inputClasses"
+      :aria-label="label || undefined"
       @input="
         $emit('update:modelValue', ($event.target as HTMLInputElement).value)
       "
@@ -65,6 +68,9 @@ const props = defineProps({
 });
 
 defineEmits(["update:modelValue"]);
+
+// Generate a unique ID for the input to associate with the label
+const inputId = computed(() => `input-${Math.random().toString(36).substr(2, 9)}`);
 
 const inputClasses = computed(() => {
   const base =

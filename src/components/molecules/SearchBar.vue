@@ -5,6 +5,7 @@
       :value="modelValue"
       type="text"
       :placeholder="placeholder"
+      :aria-label="placeholder || 'Buscar'"
       class="w-full bg-white border border-gray-200 rounded-md pl-9 pr-4 py-2 text-sm text-primary-100 placeholder-gray-400 outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all duration-150"
       @input="$emit('update:modelValue', $event.target.value)"
     />

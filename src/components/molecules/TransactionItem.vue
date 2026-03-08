@@ -21,7 +21,7 @@
         <p class="text-sm text-gray-400 mt-0.5">{{ formattedDate }}</p>
       </div>
 
-      <IconButton :icon="Trash2" variant="danger" size="md"
+      <IconButton :icon="Trash2" label="Excluir transação" variant="danger" size="md"
         class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-150" @click="$emit('delete', transaction)" />
     </div>
   </li>
