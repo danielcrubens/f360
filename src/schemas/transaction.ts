@@ -7,17 +7,10 @@ export const transactionSchema = z.object({
     .max(100, 'Descrição deve ter no máximo 100 caracteres'),
 
   amount: z
-    .number({
-      required_error: 'Valor é obrigatório',
-      invalid_type_error: 'Valor deve ser um número'
-    })
-    .positive('Valor deve ser maior que 0')
-    .refine((val) => val > 0, 'Valor deve ser maior que 0'),
+    .number()
+    .positive('Valor deve ser maior que 0'),
 
-  type: z.enum(['income', 'expense'], {
-    required_error: 'Tipo é obrigatório',
-    errorMap: () => ({ message: 'Tipo deve ser receita ou despesa' })
-  }),
+  type: z.enum(['income', 'expense']),
 
   category: z.enum([
     'Alimentação',
@@ -29,11 +22,12 @@ export const transactionSchema = z.object({
     'Salário',
     'Freelance',
     'Outros'
-  ], {
-    required_error: 'Selecione uma categoria',
-    invalid_type_error: 'Selecione uma categoria'
-  }),
-
+  ]),
 })
 
 export type TransactionInput = z.infer<typeof transactionSchema>
+
+// Tipo completo com data para o formulário
+export type TransactionFormData = TransactionInput & {
+  date: string
+}

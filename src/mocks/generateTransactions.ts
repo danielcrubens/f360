@@ -115,7 +115,7 @@ function generateRandomDate(): string {
 
   const randomTime = startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime())
   const date = new Date(randomTime)
-  return date.toISOString().split('T')[0]
+  return date.toISOString().split('T')[0]!
 }
 
 export function generateTransactions(count: number = 30000): Transaction[] {

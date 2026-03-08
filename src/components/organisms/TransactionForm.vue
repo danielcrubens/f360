@@ -85,7 +85,7 @@ import Select from '@/components/atoms/Select.vue'
 import Button from '@/components/atoms/Button.vue'
 import IconButton from '@/components/atoms/IconButton.vue'
 import TypeToggle from '@/components/molecules/TypeToggle.vue'
-import { transactionSchema, type TransactionInput } from '@/schemas/transaction'
+import { transactionSchema, type TransactionInput, type TransactionFormData } from '@/schemas/transaction'
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true }
@@ -93,9 +93,15 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 
-const getToday = () => new Date().toISOString().split('T')[0]
+const getToday = () => new Date().toISOString().split('T')[0]!
 
-const form = ref({
+const form = ref<{
+  description: string
+  amount: string
+  type: 'income' | 'expense'
+  category: string
+  date: string
+}>({
   description: '',
   amount: '',
   type: 'income' as const,
@@ -111,8 +117,7 @@ function validateAll(): boolean {
     description: form.value.description,
     amount: parseFloat(form.value.amount) || 0,
     type: form.value.type,
-    category: form.value.category as TransactionInput['category'],
-    date: form.value.date
+    category: form.value.category as TransactionInput['category']
   }
 
   const result = transactionSchema.safeParse(formData)
@@ -138,7 +143,7 @@ function validateAll(): boolean {
 function handleSubmit() {
   if (!validateAll()) return
 
-  const data: TransactionInput = {
+  const data: TransactionFormData = {
     description: form.value.description,
     amount: parseFloat(form.value.amount),
     type: form.value.type,
@@ -172,7 +177,7 @@ watch(() => props.isOpen, (newVal) => {
   }
 })
 
-watch(form.value, (newVal, oldVal) => {
+watch(() => ({ ...form.value }), (newVal, oldVal) => {
   Object.keys(newVal).forEach(key => {
     if (newVal[key as keyof typeof newVal] !== oldVal[key as keyof typeof oldVal]) {
       if (errors.value[key]) {
@@ -180,5 +185,5 @@ watch(form.value, (newVal, oldVal) => {
       }
     }
   })
-})
+}, { deep: true })
 </script>
