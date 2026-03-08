@@ -34,10 +34,8 @@
               <Input
                 v-model="form.amount"
                 label="Valor (R$)"
-                type="number"
+                type="text"
                 placeholder="0,00"
-                min="0"
-                step="0.01"
                 :error="errors.amount"
               />
               <div>
@@ -73,9 +71,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { X } from 'lucide-vue-next'
-import { z } from 'zod'
 import Input from '@/components/atoms/Input.vue'
 import Select from '@/components/atoms/Select.vue'
 import Button from '@/components/atoms/Button.vue'
@@ -101,51 +98,11 @@ const form = ref({
 
 const errors = ref<Record<string, string>>({})
 
-const isValid = computed(() => {
-  return (
-    form.value.description.length >= 3 &&
-    form.value.description.length <= 100 &&
-    form.value.amount !== '' &&
-    parseFloat(form.value.amount) > 0 &&
-    form.value.category !== '' &&
-    !isDateInFuture(form.value.date)
-  )
-})
-
-function isDateInFuture(dateStr: string): boolean {
-  const selectedDate = new Date(dateStr)
-  const today = new Date()
-  today.setHours(23, 59, 59, 999)
-  return selectedDate > today
-}
-
-function validateField(field: keyof typeof form.value, value: string) {
-  try {
-    transactionSchema.shape[field].parse(value)
-    errors.value[field] = undefined
-    return true
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      errors.value[field] = error.errors[0].message
-    }
-    return false
-  }
-}
 
 function validateAll(): boolean {
-  // Verifica categoria vazia antes de validar
-  if (!form.value.category) {
-    errors.value.category = 'Selecione uma categoria'
-  }
-
-  // Verifica amount vazio antes de validar
-  if (!form.value.amount || isNaN(parseFloat(form.value.amount))) {
-    errors.value.amount = 'Informe um valor válido'
-  }
-
   const formData: TransactionInput = {
     description: form.value.description,
-    amount: parseFloat(form.value.amount),
+    amount: parseFloat(form.value.amount) || 0,
     type: form.value.type,
     category: form.value.category as TransactionInput['category'],
     date: form.value.date
@@ -157,11 +114,8 @@ function validateAll(): boolean {
     result.error.issues.forEach(err => {
       const field = err.path[0] as keyof typeof errors.value
       if (field) {
-        // Override mensagens para algo mais amigável
         if (field === 'category') {
           errors.value[field] = 'Selecione uma categoria'
-        } else if (field === 'amount') {
-          errors.value[field] = 'Informe um valor válido'
         } else {
           errors.value[field] = err.message
         }
@@ -211,28 +165,13 @@ watch(() => props.isOpen, (newVal) => {
   }
 })
 
-// Limpa erro de campo específico quando usuário começa a digitar
-watch(() => form.value.description, () => {
-  if (errors.value.description) {
-    delete errors.value.description
-  }
-})
-
-watch(() => form.value.amount, () => {
-  if (errors.value.amount) {
-    delete errors.value.amount
-  }
-})
-
-watch(() => form.value.category, () => {
-  if (errors.value.category) {
-    delete errors.value.category
-  }
-})
-
-watch(() => form.value.date, () => {
-  if (errors.value.date) {
-    delete errors.value.date
-  }
+watch(form.value, (newVal, oldVal) => {
+  Object.keys(newVal).forEach(key => {
+    if (newVal[key as keyof typeof newVal] !== oldVal[key as keyof typeof oldVal]) {
+      if (errors.value[key]) {
+        delete errors.value[key]
+      }
+    }
+  })
 })
 </script>
