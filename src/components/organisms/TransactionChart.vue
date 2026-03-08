@@ -152,7 +152,7 @@ function renderChart() {
     },
     plotOptions: {
       column: {
-        legendSymbol: 'lineMarker' // ✅ linha com marcador na legenda
+        legendSymbol: 'lineMarker' 
       },
       spline: {
         lineWidth: 3,

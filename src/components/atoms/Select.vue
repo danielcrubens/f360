@@ -6,7 +6,7 @@
     <select
       :value="modelValue"
       :class="selectClasses"
-      @change="$emit('update:modelValue', $event.target.value)"
+      @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
       v-bind="$attrs"
     >
       <slot />
@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
 const props = defineProps({

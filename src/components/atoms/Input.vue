@@ -14,15 +14,19 @@
       :max="max"
       :step="step"
       :class="inputClasses"
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="
+        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
       v-bind="$attrs"
     />
     <p v-if="error" class="text-xs text-alert mt-1">{{ error }}</p>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+import type { PropType } from "vue";
+import type { InputType } from "@/types/components";
 
 const props = defineProps({
   modelValue: {
@@ -30,10 +34,9 @@ const props = defineProps({
     default: "",
   },
   type: {
-    type: String,
+    type: String as PropType<InputType>,
     default: "text",
-    validator: (value) =>
-      ["text", "number", "date", "email", "tel"].includes(value),
+    validator: (value: InputType) => ["text", "number", "date"].includes(value),
   },
   label: {
     type: String,
