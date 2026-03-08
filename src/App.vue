@@ -38,6 +38,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useToast } from 'vue-toastification'
 import Navbar from '@/components/organisms/Navbar.vue'
 import SummaryCards from '@/components/organisms/SummaryCards.vue'
 import TransactionList from '@/components/organisms/TransactionList.vue'
@@ -46,12 +47,11 @@ import DeleteModal from '@/components/organisms/DeleteModal.vue'
 
 import { useTransactionStore } from '@/stores/transactionStore'
 
+const toast = useToast()
 const store = useTransactionStore()
 
 onMounted(() => {
-  console.time('Loading transactions')
   store.initStore()
-  console.timeEnd('Loading transactions')
 })
 
 const searchInput = ref('')
@@ -64,8 +64,15 @@ watch(searchInput, (val) => {
 const deleteTarget = ref(null)
 function askDelete(tx) { deleteTarget.value = tx }
 function confirmDelete() {
+  const txDescription = deleteTarget.value.description
+  const txType = deleteTarget.value.type
+
   store.deleteTransaction(deleteTarget.value.id)
   deleteTarget.value = null
+
+  toast.success(
+    `${txType === 'income' ? 'Entrada' : 'Saída'} excluída: ${txDescription}`
+  )
 }
 
 const form = ref({
@@ -98,6 +105,11 @@ function submitForm(data) {
     category: data.category,
     date: data.date
   })
+
+  toast.success(
+    `${data.type === 'income' ? 'Entrada' : 'Saída'} adicionada: ${data.description}`
+  )
+
   closeModal()
 }
 
