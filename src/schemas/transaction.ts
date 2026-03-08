@@ -34,26 +34,6 @@ export const transactionSchema = z.object({
     invalid_type_error: 'Selecione uma categoria'
   }),
 
-  date: z
-    .string({
-      required_error: 'Data é obrigatória'
-    })
-    .min(1, 'Data é obrigatória')
-    .refine((dateStr) => {
-      const selectedDate = new Date(dateStr)
-      const today = new Date()
-      today.setHours(23, 59, 59, 999)
-      return selectedDate <= today
-    }, 'Data não pode ser no futuro')
 })
 
 export type TransactionInput = z.infer<typeof transactionSchema>
-
-
-export function validateTransaction(data: unknown) {
-  return transactionSchema.parse(data)
-}
-
-export function safeValidateTransaction(data: unknown) {
-  return transactionSchema.safeParse(data)
-}
