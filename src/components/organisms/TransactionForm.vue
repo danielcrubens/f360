@@ -17,7 +17,7 @@
       >
         <div v-if="isOpen" class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-primary-100">Nova Transação</h2>
+            <h2 class="text-xl font-semibold text-primary-100">Nova Transação</h2>
             <IconButton :icon="X" variant="gray" size="md" @click="closeModal" />
           </div>
 

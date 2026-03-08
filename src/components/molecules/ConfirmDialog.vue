@@ -16,7 +16,7 @@
         leave-to-class="translate-y-2.5 scale-[0.97] opacity-0"
       >
         <div v-if="isOpen" class="bg-white rounded-md shadow-lg w-full max-w-sm p-6">
-          <h2 class="text-lg font-bold text-primary-100 mb-2">{{ title }}</h2>
+          <h2 class="text-lg font-semibold text-primary-100 mb-2">{{ title }}</h2>
           <p class="text-sm text-gray-500 mb-6 leading-relaxed">{{ message }}</p>
           <div class="flex gap-3 justify-end">
             <Button variant="secondary" size="md" @click="$emit('close')">Cancelar</Button>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-1.5 xl:gap-4">
     <div :class="iconClasses">
       <component :is="icon" class="w-5 h-5" />
     </div>
@@ -54,7 +54,7 @@ const iconClasses = computed(() => {
 })
 
 const valueClasses = computed(() => {
-  const base = 'text-xl font-bold tracking-tight'
+  const base = 'text-lg xl:text-xl font-bold tracking-tight '
 
   const colors = {
     green: 'text-success',
