@@ -61,14 +61,11 @@ export const useTransactionStore = defineStore('transaction', () => {
       ...payload,
       id: crypto.randomUUID()
     }
-    transactions.value.unshift(newTransaction)
+    transactions.value = [newTransaction, ...transactions.value]
   }
 
   function deleteTransaction(id: string) {
-    const index = transactions.value.findIndex(t => t.id === id)
-    if (index !== -1) {
-      transactions.value.splice(index, 1)
-    }
+    transactions.value = transactions.value.filter(t => t.id !== id)
   }
 
   function setFilter(type: 'all' | 'income' | 'expense') {

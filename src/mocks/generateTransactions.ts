@@ -3,7 +3,6 @@ import { TransactionCategory } from '@/types/transaction'
 
 type TransactionType = Transaction['type']
 
-// Tipo para apenas categorias de despesa (exclui Salário e Freelance que são income)
 type ExpenseCategory = Exclude<TransactionCategory, TransactionCategory.Salário | TransactionCategory.Freelance>
 
 const incomeDescriptions: readonly string[] = [
@@ -97,7 +96,6 @@ const expenseCategories: readonly ExpenseCategory[] = [
   TransactionCategory.Outros
 ] as const
 
-// Helper functions com type safety completo
 function getRandomElement<T>(array: readonly T[]): T {
   if (array.length === 0) {
     throw new Error('Cannot get random element from empty array')
@@ -121,9 +119,7 @@ function generateRandomDate(): string {
 }
 
 export function generateTransactions(count: number = 30000): Transaction[] {
-  // ✅ Array.from pré-aloca memória de uma vez (mais performático que push)
   return Array.from({ length: count }, (): Transaction => {
-    // 75% despesas, 25% receitas
     const type: TransactionType = Math.random() < 0.75 ? 'expense' : 'income'
 
     let category: TransactionCategory
@@ -144,7 +140,7 @@ export function generateTransactions(count: number = 30000): Transaction[] {
     return {
       id: crypto.randomUUID(),
       description,
-      amount: Math.round(amount * 100) / 100, // 2 casas decimais
+      amount: Math.round(amount * 100) / 100, 
       type,
       category,
       date: generateRandomDate()
@@ -152,7 +148,6 @@ export function generateTransactions(count: number = 30000): Transaction[] {
   })
 }
 
-// Singleton pattern para evitar reger na hot reload
 let cachedTransactions: Transaction[] | null = null
 
 export function getTransactions(count: number = 30000): Transaction[] {
@@ -162,7 +157,6 @@ export function getTransactions(count: number = 30000): Transaction[] {
   return cachedTransactions
 }
 
-// Reset cache (útil para testes)
 export function resetTransactionCache(): void {
   cachedTransactions = null
 }
