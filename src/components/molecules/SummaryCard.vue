@@ -3,16 +3,17 @@
     <IconBadge
       :icon="icon"
       :label="label"
-      :value="value"
+      :value="formattedValue"
       :color-scheme="colorScheme"
     />
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import IconBadge from '@/components/atoms/IconBadge.vue'
 
-defineProps({
+const props = defineProps({
   icon: {
     type: [Object, Function],
     required: true
@@ -22,7 +23,7 @@ defineProps({
     required: true
   },
   value: {
-    type: [String, Number],
+    type: Number,
     required: true
   },
   colorScheme: {
@@ -31,4 +32,11 @@ defineProps({
     validator: (value) => ['green', 'red', 'primary'].includes(value)
   }
 })
+
+const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL'
+})
+
+const formattedValue = computed(() => currencyFormatter.format(props.value))
 </script>

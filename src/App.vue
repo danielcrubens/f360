@@ -4,9 +4,9 @@
 
     <section class="max-w-11/12 mx-auto xl:px-6 py-6">
       <SummaryCards
-        :total-income="store.formattedIncome"
-        :total-expenses="store.formattedExpense"
-        :balance="store.formattedBalance"
+        :total-income="store.totalIncome"
+        :total-expenses="store.totalExpense"
+        :balance="store.balance"
       />
     </section>
 
