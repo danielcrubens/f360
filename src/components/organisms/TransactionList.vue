@@ -14,7 +14,6 @@
       <ViewToggle v-model="showChart" />
     </div>
 
-    <!-- VISTA: LISTA -->
     <Transition
       enter-active-class="transition-all duration-500"
       enter-from-class="opacity-0 -translate-y-2"
@@ -32,20 +31,23 @@
             </p>
           </div>
 
-          <div v-bind="containerProps" class="h-[600px] overflow-auto">
-            <div v-bind="wrapperProps" class="relative">
-              <TransactionItem
-                v-for="{ data: tx, index } in list"
-                :key="tx.id"
-                :transaction="tx"
-                @delete="$emit('delete', tx)"
-              />
-            </div>
+          <div v-if="transactions.length === 0" class="h-[600px] flex flex-col items-center justify-center gap-4">
+            <SearchAlert class="w-12 h-12 text-primary-100" />
+            <h2 class="lg:text-lg xl:text-xl font-semibold text-primary-100">Nenhuma transação encontrada</h2>
           </div>
 
-          <div v-if="transactions.length === 0" class="px-5 py-12 text-center text-sm text-gray-400">
-            Nenhuma transação encontrada.
-          </div>
+          <template v-else>
+            <div v-bind="containerProps" class="h-[600px] overflow-auto">
+              <div v-bind="wrapperProps" class="relative">
+                <TransactionItem
+                  v-for="{ data: tx, index } in list"
+                  :key="tx.id"
+                  :transaction="tx"
+                  @delete="$emit('delete', tx)"
+                />
+              </div>
+            </div>
+          </template>
         </div>
       </template>
 
@@ -61,6 +63,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useVirtualList } from '@vueuse/core'
+import { SearchAlert } from 'lucide-vue-next'
 import FilterTabs from '@/components/molecules/FilterTabs.vue'
 import SearchBar from '@/components/molecules/SearchBar.vue'
 import ViewToggle from '@/components/molecules/ViewToggle.vue'
